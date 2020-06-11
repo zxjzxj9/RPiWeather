@@ -1,0 +1,4 @@
+RPi.GPIO
+adafruit-circuitpython-bme280
+sqlalchemy
+psycopg2

@@ -22,9 +22,10 @@ Pi SDA (GPIO2) <-> SDA
 Pi SCL (GPIO3) <-> SCL
 
 
-## 3. Backend Restful API
+## 3. Backend database & RESTful API
 
+We use PostgreSQL as the backend. It can be easily set up on a RPi device. The data is sampled every 1hr, and stored into the database. 
 
-
+Flask is used as the backend web engine. It has high flexiblity and can be easily integrated with our data sampling system.
 
 ## 4. Front End
