@@ -1,6 +1,11 @@
 #! /usr/bin/env python
 
+""" Srcipt to launch a flask server
+    Authored by Victor Zhang, 06/12/2020
+"""
+
 from flask import Flask, request
+from weather_restful import app
 import argparse
 
 parser = argparse.ArgumentParser(description='Flask data RESTful server')
@@ -9,12 +14,14 @@ parser.add_argument("-p", "--port", type=int, default=8080, help="Binding port")
 parser.add_argument("-d", "--debug", action="store_true", help="Debug mode")
 args = parser.parse_args()
 
-app = Flask(__name__)
-
 
 @app.route("/")
 def example():
-    return ({"status": "success"}, 200)
+    return {"status": "success"}, 200
+
+@app.route("/api/date_range")
+def date_ramge():
+    pass
 
 
 if __name__ == "__main__":
