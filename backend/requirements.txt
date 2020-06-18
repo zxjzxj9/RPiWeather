@@ -3,3 +3,4 @@ adafruit-circuitpython-bme280
 sqlalchemy
 psycopg2
 flask
+flasgger
