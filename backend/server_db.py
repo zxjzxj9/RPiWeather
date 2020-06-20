@@ -16,24 +16,12 @@ from sqlalchemy import Table, MetaData, create_engine, and_, or_
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.automap import automap_base
 
-from weather_restful import app
-
 engine = create_engine("postgresql:///weather")
 Base = automap_base()
 Base.prepare(engine, reflect=True)
 metadata = MetaData()
 metadata.reflect(bind=engine)
 Session = sessionmaker(bind=engine)
-
-@app.before_request
-def create_session():
-    flask.g.session = Session()
-    flask.g.table_list = TableList() 
-
-@app.teardown_appcontext
-def shutdown_session(response_or_exc):
-    flask.g.session.commit()
-    flask.g.session.remove()
 
 class TableList:
     def __init__(self):
