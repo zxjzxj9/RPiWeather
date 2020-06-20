@@ -28,6 +28,7 @@ Session = sessionmaker(bind=engine)
 @app.before_request
 def create_session():
     flask.g.session = Session()
+    flask.g.table_list = TableList() 
 
 @app.teardown_appcontext
 def shutdown_session(response_or_exc):
