@@ -29,3 +29,5 @@ We use PostgreSQL as the backend. It can be easily set up on a RPi device. The d
 Flask is used as the backend web engine. It has high flexiblity and can be easily integrated with our data sampling system.
 
 ## 4. Front End
+
+We use react.js with SemanticUI as the frontend framework. 
