@@ -17,20 +17,24 @@ const SidebarExampleVisible = () => (
       width='thin'
     >
       <Menu.Item as='a'>
-        <Icon name='home' />
-        Home
+        <Icon name='chart line' />
+	Weather Data
       </Menu.Item>
       <Menu.Item as='a'>
-        <Icon name='gamepad' />
-        Games
+        <Icon name='microchip' />
+	Machine Learning Pipeline
       </Menu.Item>
       <Menu.Item as='a'>
-        <Icon name='camera' />
-        Channels
+        <Icon name='settings' />
+	Settings
+      </Menu.Item>
+      <Menu.Item as='a'>
+        <Icon name='info' />
+	Info
       </Menu.Item>
     </Sidebar>
 
-    <Sidebar.Pusher>
+    <Sidebar.Pusher style={{"min-height": "100vh"}}>
       <Segment basic>
         <Header as='h3'>Application Content</Header>
         <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
