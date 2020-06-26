@@ -1,6 +1,6 @@
 import React from 'react';
-import { Header, Icon, Menu, Segment, Sidebar } from 'semantic-ui-react';
-
+import { Header, Icon, List, Menu, Segment, Sidebar } from 'semantic-ui-react';
+import { DateTimeInput } from 'semantic-ui-calendar-react';
 
 class Index extends React.Component {
   render() {
@@ -11,10 +11,31 @@ class Index extends React.Component {
 }
 
 class Chart extends React.Component {
+  constructor(props) {
+    super(props);
+    var date1 = new Date();
+    // 8 Hours before current time
+    date1.setHours(date1.getHours() - 8);
+    var date2 = new Date();
+    this.state = {start: date1, end: date2};
+  }
 
   render() {
     return (
+      <div>
       <Header as='h3'>Weather Data Chart</Header>
+      <List divided relaxed>
+        <List.Item> 
+          <List.Header> Start datetime: </List.Header> 
+          <DateTimeInput />
+	</List.Item>
+
+        <List.Item> 
+          <List.Header> End datetime: </List.Header> 
+          <DateTimeInput />
+	</List.Item>
+      </List>
+      </div>
     );
   }
 }
