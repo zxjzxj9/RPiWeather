@@ -1,11 +1,11 @@
 import React from 'react';
-import { Header, Icon, List, Menu, Segment, Sidebar } from 'semantic-ui-react';
+import { Form, Header, Icon, List, Menu, Segment, Sidebar } from 'semantic-ui-react';
 import { DateTimeInput } from 'semantic-ui-calendar-react';
 
 class Index extends React.Component {
   render() {
     return (
-      <Header as='h3'>Raspberry Pi Weather System</Header>
+      <Header as='h1'>Raspberry Pi Weather System</Header>
     );
   }
 }
@@ -17,22 +17,35 @@ class Chart extends React.Component {
     // 8 Hours before current time
     date1.setHours(date1.getHours() - 8);
     var date2 = new Date();
-    this.state = {start: date1, end: date2};
+    this.state = {
+      date: '',
+      time: '',
+      dateTime: '',
+      datesRange: '',
+      start: date1,
+      end: date2
+    };
+  }
+
+  handleChange = (event: React.SyntheticEvent, { name, value }: DateTimeFormHandleChangeData) => {
+    if (this.state.hasOwnProperty(name)) {
+      this.setState({ [name]: value });
+    }
   }
 
   render() {
     return (
       <div>
-      <Header as='h3'>Weather Data Chart</Header>
+      <Header as='h1'>Weather Data Chart</Header>
       <List divided relaxed>
-        <List.Item> 
+        <List.Item>
           <List.Header> Start datetime: </List.Header> 
-          <DateTimeInput />
+          <DateTimeInput value={this.state.start} dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange}/>
 	</List.Item>
 
         <List.Item> 
           <List.Header> End datetime: </List.Header> 
-          <DateTimeInput />
+          <DateTimeInput value={this.state.end} dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange}/>
 	</List.Item>
       </List>
       </div>
@@ -89,7 +102,7 @@ class MainPage extends React.Component {
         </Menu.Item>
       </Sidebar>
 
-      <Sidebar.Pusher style={{"min-height": "100vh"}}>
+      <Sidebar.Pusher style={{minHeight: "100vh"}}>
         <Segment basic>
 	    {this.renderSideBar()}
         </Segment>
