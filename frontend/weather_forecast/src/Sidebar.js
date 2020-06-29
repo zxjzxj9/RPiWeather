@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Header, Icon, List, Menu, Segment, Sidebar } from 'semantic-ui-react';
+import { Header, Icon, List, Menu, Segment, Sidebar } from 'semantic-ui-react';
 import { DateTimeInput } from 'semantic-ui-calendar-react';
 
 class Index extends React.Component {
@@ -27,7 +27,7 @@ class Chart extends React.Component {
     };
   }
 
-  handleChange = (event: React.SyntheticEvent, { name, value }: DateTimeFormHandleChangeData) => {
+  handleChange = (event, { name, value }) => {
     if (this.state.hasOwnProperty(name)) {
       this.setState({ [name]: value });
     }
@@ -41,12 +41,12 @@ class Chart extends React.Component {
         <List.Item>
           <List.Header> Start datetime: </List.Header> 
           <DateTimeInput value={this.state.start} dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange}/>
-	</List.Item>
+      	</List.Item>
 
         <List.Item> 
           <List.Header> End datetime: </List.Header> 
           <DateTimeInput value={this.state.end} dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange}/>
-	</List.Item>
+      	</List.Item>
       </List>
       </div>
     );
