@@ -27,6 +27,14 @@ class Chart extends React.Component {
     };
   }
 
+  formatDateTime(dateTime) {
+
+  }
+
+  parseDateTime(str) {
+
+  }
+
   handleChange = (event, { name, value }) => {
     if (this.state.hasOwnProperty(name)) {
       this.setState({ [name]: value });
@@ -40,12 +48,12 @@ class Chart extends React.Component {
       <List divided relaxed>
         <List.Item>
           <List.Header> Start datetime: </List.Header> 
-          <DateTimeInput value={this.state.start} dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange}/>
+          <DateTimeInput value={this.state.start} dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange.bind(this)}/>
       	</List.Item>
 
         <List.Item> 
           <List.Header> End datetime: </List.Header> 
-          <DateTimeInput value={this.state.end} dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange}/>
+          <DateTimeInput value={this.state.end} dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange.bind(this)}/>
       	</List.Item>
       </List>
       </div>
