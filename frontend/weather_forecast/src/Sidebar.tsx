@@ -1,6 +1,8 @@
 import React from 'react';
 import { Header, Icon, List, Menu, Segment, Sidebar } from 'semantic-ui-react';
-import { DateTimeInput } from 'semantic-ui-calendar-react';
+import { DateTimeInput, DateTimeInputOnChangeData } from 'semantic-ui-calendar-react';
+
+type DateTimeFormHandleChangeData = DateTimeInputOnChangeData;
 
 class Index extends React.Component {
   render() {
@@ -10,33 +12,29 @@ class Index extends React.Component {
   }
 }
 
-class Chart extends React.Component {
-  constructor(props) {
+class Chart extends React.Component<any, any>{
+  constructor(props: any) {
     super(props);
     var date1 = new Date();
     // 8 Hours before current time
     date1.setHours(date1.getHours() - 8);
     var date2 = new Date();
     this.state = {
+      year: '',
+      month: '',
       date: '',
       time: '',
       dateTime: '',
       datesRange: '',
+      monthsRange: '',
       start: date1,
       end: date2
     };
   }
 
-  formatDateTime(dateTime) {
-
-  }
-
-  parseDateTime(str) {
-
-  }
-
-  handleChange = (event, { name, value }) => {
+  private handleChange = (event: React.SyntheticEvent, { name, value }: DateTimeFormHandleChangeData) => {
     if (this.state.hasOwnProperty(name)) {
+      console.log(name, value);
       this.setState({ [name]: value });
     }
   }
@@ -48,12 +46,12 @@ class Chart extends React.Component {
       <List divided relaxed>
         <List.Item>
           <List.Header> Start datetime: </List.Header> 
-          <DateTimeInput value={this.state.start} dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange.bind(this)}/>
+          <DateTimeInput value="Start Time" dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange}/>
       	</List.Item>
 
         <List.Item> 
           <List.Header> End datetime: </List.Header> 
-          <DateTimeInput value={this.state.end} dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange.bind(this)}/>
+          <DateTimeInput value="End Time" dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange}/>
       	</List.Item>
       </List>
       </div>
@@ -61,14 +59,14 @@ class Chart extends React.Component {
   }
 }
 
-class MainPage extends React.Component {
+class MainPage extends React.Component<any, any>{
     
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {content: 'index'};
   }
 
-  handleClick(componentName) {
+  handleClick(componentName: any) {
     this.setState({content: componentName});
   }
 
