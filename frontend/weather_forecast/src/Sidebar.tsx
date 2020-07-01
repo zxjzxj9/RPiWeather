@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Icon, List, Menu, Segment, Sidebar } from 'semantic-ui-react';
+import { Header, Icon, List, Menu, Segment, Sidebar, Label, Button } from 'semantic-ui-react';
 import { DateTimeInput, DateTimeInputOnChangeData } from 'semantic-ui-calendar-react';
 
 type DateTimeFormHandleChangeData = DateTimeInputOnChangeData;
@@ -15,10 +15,10 @@ class Index extends React.Component {
 class Chart extends React.Component<any, any>{
   constructor(props: any) {
     super(props);
-    var date1 = new Date();
+    //var date1 = new Date();
     // 8 Hours before current time
-    date1.setHours(date1.getHours() - 8);
-    var date2 = new Date();
+    //date1.setHours(date1.getHours() - 8);
+    //var date2 = new Date();
     this.state = {
       year: '',
       month: '',
@@ -27,34 +27,37 @@ class Chart extends React.Component<any, any>{
       dateTime: '',
       datesRange: '',
       monthsRange: '',
-      start: date1,
-      end: date2
+      start: '',
+      end: ''
     };
   }
 
   private handleChange = (event: React.SyntheticEvent, { name, value }: DateTimeFormHandleChangeData) => {
     if (this.state.hasOwnProperty(name)) {
-      console.log(name, value);
+      // console.log(name, value);
       this.setState({ [name]: value });
     }
   }
 
   render() {
     return (
-      <div>
+      <Segment>
       <Header as='h1'>Weather Data Chart</Header>
       <List divided relaxed>
         <List.Item>
-          <List.Header> Start datetime: </List.Header> 
-          <DateTimeInput value="Start Time" dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange}/>
+          <Label pointing='below'> Start Datetime: </Label> 
+          <DateTimeInput value={this.state.start} name='start' clearable={true} dateFormat="DD-MM-YY" timeFormat="24" iconPosition='left'
+            placeholder="Start Time" onChange={this.handleChange}/>
+          <br />
+          <Label pointing='below'> End Datetime: </Label> 
+          <DateTimeInput value={this.state.end} name='end' clearable={true} dateFormat="DD-MM-YY" timeFormat="24" iconPosition='left'
+            placeholder="End Time" onChange={this.handleChange}/>
       	</List.Item>
+        <br />
+        <Button content="Draw" primary/>
 
-        <List.Item> 
-          <List.Header> End datetime: </List.Header> 
-          <DateTimeInput value="End Time" dateFormat="DD-MM-YYYY HH:MM" onChange={this.handleChange}/>
-      	</List.Item>
       </List>
-      </div>
+      </Segment>
     );
   }
 }
