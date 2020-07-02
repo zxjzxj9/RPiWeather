@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Icon, List, Menu, Segment, Sidebar, Label, Button } from 'semantic-ui-react';
+import { Header, Icon, List, Menu, Segment, Sidebar, Label, Button, Divider } from 'semantic-ui-react';
 import { DateTimeInput, DateTimeInputOnChangeData } from 'semantic-ui-calendar-react';
 
 type DateTimeFormHandleChangeData = DateTimeInputOnChangeData;
@@ -28,7 +28,8 @@ class Chart extends React.Component<any, any>{
       datesRange: '',
       monthsRange: '',
       start: '',
-      end: ''
+      end: '',
+      renderImg: false
     };
   }
 
@@ -39,24 +40,39 @@ class Chart extends React.Component<any, any>{
     }
   }
 
+
+  private handleClick = (event: React.SyntheticEvent) => {
+    this.setState({renderImg: true})
+  }
+
+  private renderImg = () => {
+    if(this.state.renderImg) {
+      return "test";
+    }
+  }
+
   render() {
     return (
       <Segment>
-      <Header as='h1'>Weather Data Chart</Header>
-      <List divided relaxed>
-        <List.Item>
-          <Label pointing='below'> Start Datetime: </Label> 
-          <DateTimeInput value={this.state.start} name='start' clearable={true} dateFormat="DD-MM-YY" timeFormat="24" iconPosition='left'
-            placeholder="Start Time" onChange={this.handleChange}/>
+        <Header as='h1'>Weather Data Chart</Header>
+        <List divided relaxed>
+          <List.Item>
+            <Label pointing='below'> Start Datetime: </Label> 
+            <DateTimeInput value={this.state.start} name='start' clearable={true} 
+              dateFormat="DD-MM-YY" timeFormat="24" iconPosition='left'
+              placeholder="Start Time" onChange={this.handleChange}/>
+            <br />
+            <Label pointing='below'> End Datetime: </Label> 
+            <DateTimeInput value={this.state.end} name='end' clearable={true} 
+              dateFormat="DD-MM-YY" timeFormat="24" iconPosition='left'
+              placeholder="End Time" onChange={this.handleChange}/>
+      	  </List.Item>
           <br />
-          <Label pointing='below'> End Datetime: </Label> 
-          <DateTimeInput value={this.state.end} name='end' clearable={true} dateFormat="DD-MM-YY" timeFormat="24" iconPosition='left'
-            placeholder="End Time" onChange={this.handleChange}/>
-      	</List.Item>
-        <br />
-        <Button content="Draw" primary/>
-
-      </List>
+          <Button content="Draw" onClick={this.handleClick} primary/>
+          <br />
+        </List>
+        <Divider horizontal/>
+        {this.renderImg()}
       </Segment>
     );
   }
@@ -113,7 +129,7 @@ class MainPage extends React.Component<any, any>{
 
       <Sidebar.Pusher style={{minHeight: "100vh"}}>
         <Segment basic>
-	    {this.renderSideBar()}
+	        {this.renderSideBar()}
         </Segment>
       </Sidebar.Pusher>
     </Sidebar.Pushable>
