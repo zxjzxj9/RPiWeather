@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Icon, List, Menu, Segment, Sidebar, Label, Button, Divider } from 'semantic-ui-react';
+import { Header, Icon, List, Menu, Segment, Sidebar, Label, Button, Divider, Placeholder } from 'semantic-ui-react';
 import { DateTimeInput, DateTimeInputOnChangeData } from 'semantic-ui-calendar-react';
 
 type DateTimeFormHandleChangeData = DateTimeInputOnChangeData;
@@ -47,7 +47,22 @@ class Chart extends React.Component<any, any>{
 
   private renderImg = () => {
     if(this.state.renderImg) {
-      return "test";
+      // console.log(this.state.start);
+      // console.log(typeof(this.state.end));
+      try {
+        var start = new Date(this.state.start);
+        var end = new Date(this.state.end);
+        console.log(start)
+        console.log(end)
+      } catch(e) {
+        alert("Error Input Date!");
+      }
+
+    } else {
+      return (<Placeholder style={{ height: 400, width: 600 }}>
+                <Placeholder.Image />
+              </Placeholder>
+      )
     }
   }
 
@@ -59,12 +74,12 @@ class Chart extends React.Component<any, any>{
           <List.Item>
             <Label pointing='below'> Start Datetime: </Label> 
             <DateTimeInput value={this.state.start} name='start' clearable={true} 
-              dateFormat="DD-MM-YY" timeFormat="24" iconPosition='left'
+              dateFormat="YYYY-MM-DD" timeFormat="24" iconPosition='left'
               placeholder="Start Time" onChange={this.handleChange}/>
             <br />
             <Label pointing='below'> End Datetime: </Label> 
             <DateTimeInput value={this.state.end} name='end' clearable={true} 
-              dateFormat="DD-MM-YY" timeFormat="24" iconPosition='left'
+              dateFormat="YYYY-MM-DD" timeFormat="24" iconPosition='left'
               placeholder="End Time" onChange={this.handleChange}/>
       	  </List.Item>
           <br />
