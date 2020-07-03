@@ -1,6 +1,7 @@
 import React from 'react';
 import { Header, Icon, List, Menu, Segment, Sidebar, Label, Button, Divider, Placeholder } from 'semantic-ui-react';
 import { DateTimeInput, DateTimeInputOnChangeData } from 'semantic-ui-calendar-react';
+// import axio from 'axio';
 
 type DateTimeFormHandleChangeData = DateTimeInputOnChangeData;
 
@@ -52,8 +53,8 @@ class Chart extends React.Component<any, any>{
       try {
         var start = new Date(this.state.start);
         var end = new Date(this.state.end);
-        console.log(start)
-        console.log(end)
+        console.log(start.toISOString())
+        console.log(end.toISOString())
       } catch(e) {
         alert("Error Input Date!");
       }
