@@ -16,10 +16,6 @@ class Index extends React.Component {
 class Chart extends React.Component<any, any>{
   constructor(props: any) {
     super(props);
-    //var date1 = new Date();
-    // 8 Hours before current time
-    //date1.setHours(date1.getHours() - 8);
-    //var date2 = new Date();
     this.state = {
       year: '',
       month: '',
@@ -51,8 +47,12 @@ class Chart extends React.Component<any, any>{
       // console.log(this.state.start);
       // console.log(typeof(this.state.end));
       try {
-        var start = new Date(this.state.start);
-        var end = new Date(this.state.end);
+        var date1 = new Date();
+        date1.setHours(date1.getHours() - 8);
+        var date2 = new Date();
+        
+        var start = this.state.start ? new Date(this.state.start) : date1;
+        var end = this.state.end? new Date(this.state.end): date2;
         // console.log(start.toISOString())
         // console.log(end.toISOString())
         return <ChartImg start={start} end={end}/>
