@@ -42,6 +42,10 @@ class Chart extends React.Component<any, any>{
     this.setState({renderImg: true})
   }
 
+  private genDownload = (event: React.SyntheticEvent) => {
+
+  }
+
   private renderImg = () => {
     if(this.state.renderImg) {
       // console.log(this.state.start);
@@ -86,6 +90,7 @@ class Chart extends React.Component<any, any>{
       	  </List.Item>
           <br />
           <Button content="Draw" onClick={this.handleClick} primary/>
+          <Button content="Download" onClick={this.genDownload} positive/>
           <br />
         </List>
         <Divider horizontal/>
