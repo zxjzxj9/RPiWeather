@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import * as d3 from 'd3';
-
+// import ReactDOM from 'react-dom';
 
 interface WeatherData {
     humidity: number[];
@@ -18,8 +18,33 @@ class ChartImg extends React.Component<any, any> {
     this.ref = React.createRef();
   }
 
-  getRef() {
-    return this.ref.current;
+  download() {
+    const clone = this.ref.current.cloneNode(true);
+    const h = parseInt(this.ref.current.style.height);
+    const w = parseInt(this.ref.current.style.width);
+    // console.log(clone, h, w);
+    const svgData = new XMLSerializer().serializeToString(clone);
+    var c = document.createElement('canvas');
+    c.setAttribute('width', w.toString());
+    c.setAttribute('height', h.toString());
+    var ctx = c.getContext('2d');
+    var img = document.createElement('img');
+    //console.log(img);
+    window.open('', 'download');
+    img.onload = () => {
+      (ctx as CanvasRenderingContext2D).drawImage(img, 0, 0, w, h);
+      // `download` attr is not well supported
+      // Will result in a download popup for chrome and the
+      // image opening in a new tab for others.
+
+      var a = document.createElement('a');
+      console.log(a);
+      a.setAttribute('href', c.toDataURL('image/png'))
+      a.setAttribute('target', 'download')
+      a.setAttribute('download', "data.pmg");
+      a.click();
+    };
+    img.setAttribute('src', 'data:image/svg+xml;base64,' + btoa(svgData));
   }
 
   fetchDraw(){
@@ -161,23 +186,7 @@ class ChartImg extends React.Component<any, any> {
           .style("text-anchor", "end")
           .attr("fill", "blue")
           .text("Humidity%");
-    //curr.append("g")
-    //      .attr("transform", "translate(" + width + ", 0)") 
-    //      .call(yAxisP);
 
-    //curr.append("g")
-    //      .attr("transform", "translate(" + width + ", 0)") 
-    //      .call(yAxisH);
-    //const ts = data!["timestamp"];
-    //console.log(ts);
-    //xScale.domain(d3.extent(ts.map(item:string => new Date(item))));
-    //xScale.domain(d3.extent(data["timestamp"].map function(d){
-    //    return new Date(d);}));
-
-    // curr.append("circle")
-    //      .attr("cx", Math.random()*30)
-    //      .attr("cy", Math.random()*30)
-    //      .attr("r", Math.random()*10);
   }
 
   componentDidMount() {

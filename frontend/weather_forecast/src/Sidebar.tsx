@@ -14,6 +14,9 @@ class Index extends React.Component {
 }
 
 class Chart extends React.Component<any, any>{
+
+  private chartRef: any;
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -28,6 +31,7 @@ class Chart extends React.Component<any, any>{
       end: '',
       renderImg: false
     };
+    this.chartRef = React.createRef();
   }
 
   private handleChange = (event: React.SyntheticEvent, { name, value }: DateTimeFormHandleChangeData) => {
@@ -37,13 +41,16 @@ class Chart extends React.Component<any, any>{
     }
   }
 
-
   private handleClick = (event: React.SyntheticEvent) => {
     this.setState({renderImg: true})
   }
 
-  private genDownload = (event: React.SyntheticEvent) => {
-
+  private handleDownload = (event: React.SyntheticEvent) => {
+    if(this.chartRef.current) {
+      this.chartRef.current.download();
+    } else {
+      alert("Please create chart first!");
+    }
   }
 
   private renderImg = () => {
@@ -59,13 +66,13 @@ class Chart extends React.Component<any, any>{
         var end = this.state.end? new Date(this.state.end): date2;
         // console.log(start.toISOString())
         // console.log(end.toISOString())
-        return <ChartImg start={start} end={end}/>
+        return <ChartImg start={start} end={end} ref={this.chartRef}/>
       } catch(e) {
         alert("Error Input Date!");
       }
 
     } else {
-      return (<Placeholder style={{ height: 400, width: 600 }}>
+      return (<Placeholder style={{ height: 500, width: 700 }}>
                 <Placeholder.Image />
               </Placeholder>
       )
@@ -90,7 +97,7 @@ class Chart extends React.Component<any, any>{
       	  </List.Item>
           <br />
           <Button content="Draw" onClick={this.handleClick} primary/>
-          <Button content="Download" onClick={this.genDownload} positive/>
+          <Button content="Download" onClick={this.handleDownload} positive/>
           <br />
         </List>
         <Divider horizontal/>
