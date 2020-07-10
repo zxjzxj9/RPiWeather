@@ -19,6 +19,10 @@ class ChartImg extends React.Component<any, any> {
     this.ref = React.createRef();
   }
 
+  getRef() {
+    return this.ref.current;
+  }
+
   fetchDraw(){
     var host = "http://192.168.199.249:8080";
     var ret;
