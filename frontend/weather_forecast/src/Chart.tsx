@@ -55,13 +55,13 @@ class ChartImg extends React.Component<any, any> {
     // From https://datawanderings.com/2019/10/28/tutorial-making-a-line-chart-in-d3-js-v-5/
     // console.log(this.ref.current.style.width, this.ref.current.style.height)
     const xScale = d3.scaleTime().range([0, width]);
-    const yScale_T = d3.scaleLinear().rangeRound([height, 0]);
-    const yScale_P = d3.scaleLinear().rangeRound([height, 0]);
-    const yScale_H = d3.scaleLinear().rangeRound([height, 0]);
+    const yScaleT = d3.scaleLinear().rangeRound([height, 0]);
+    const yScaleP = d3.scaleLinear().rangeRound([height, 0]);
+    const yScaleH = d3.scaleLinear().rangeRound([height, 0]);
 
-    yScale_T.domain(d3.extent(data.temperature) as [number, number]);
-    yScale_P.domain(d3.extent(data.pressure) as [number, number]);
-    yScale_H.domain(d3.extent(data.humidity) as [number, number]);
+    yScaleT.domain(d3.extent(data.temperature) as [number, number]);
+    yScaleP.domain(d3.extent(data.pressure) as [number, number]);
+    yScaleH.domain(d3.extent(data.humidity) as [number, number]);
 
     // xScale.domain(data.timestamp.map(item => new Date(item)));
     const datetime = data.timestamp.map(item => new Date(item))
@@ -70,25 +70,39 @@ class ChartImg extends React.Component<any, any> {
     //console.log(maxmin);
 
     const xAxis = d3.axisBottom(xScale);
-    const yAxisT = d3.axisLeft(yScale_T);
-    const yAxisP = d3.axisLeft(yScale_P);
-    const yAxisH = d3.axisRight(yScale_H);
+    const yAxisT = d3.axisLeft(yScaleT);
+    const yAxisP = d3.axisLeft(yScaleP);
+    const yAxisH = d3.axisRight(yScaleH);
 
     function trans(x: number, y:number) {
       return "translate(" + (x + margin.left) + ", " + (y + margin.top) + ")";
     }
 
-    function drawLine(x: number[], y: number[], color='black') {
+    function drawLine(x: Date[], y: number[], 
+      xscaler:d3.ScaleTime<number, number>, 
+      yscaler:d3.ScaleLinear<number, number>, 
+      color='black') {
       // zip xy
       const d = x.map(function(e, i){return {x:e, y:y[i]};});
-      //const line: d3.Line<{x: number, y:number}> = d3.line()
+      const line = d3.line<any>()
+                     .x(d=>xscaler(d.x))
+                     .y(d=>yscaler(d.y));
+                     //.curve(d3.curveBasis);
 
-      //curr.append("path")
-      //    .data(d)
-      //    .attr("class", "line")
-      //    .style("stroke", color)
-      //    .attr("d", line);
+      curr.append("path")
+          .attr("transform", trans(0, 0))
+          .datum(d)
+          .attr("class", "line")
+          .style("fill", "none")
+          .style("stroke", color)
+          .style("stroke-opacity", 0.5)
+          .style("stroke-width", 2)
+          .attr("d", line);
     }
+
+    drawLine(datetime, data.temperature, xScale, yScaleT, "red");
+    drawLine(datetime, data.pressure, xScale, yScaleP, "green");
+    drawLine(datetime, data.humidity, xScale, yScaleH, "blue");
 
     // draw axis
     curr.append("g")
@@ -100,6 +114,7 @@ class ChartImg extends React.Component<any, any> {
           .attr("x", width/2)
           .attr("y", 20)
           .attr("dy", "2.00em")
+          .style("font-size", "12px")
           .style("text-anchor", "end")
           .attr("fill", "#000000")
           .text("Datetime");
@@ -113,6 +128,7 @@ class ChartImg extends React.Component<any, any> {
           .attr("x", -height/2+30)
           .attr("y", -60)
           .attr("dy", "2.00em")
+          .style("font-size", "12px")
           .style("text-anchor", "end")
           .attr("fill", "red")
           .text("Temperature/°C");
@@ -126,6 +142,7 @@ class ChartImg extends React.Component<any, any> {
           .attr("y", -70)
           .attr("transform", "rotate(-90)")
           .attr("dy", "2.00em")
+          .style("font-size", "12px")
           .style("text-anchor", "end")
           .attr("fill", "green")
           .text("Pressure/hBar");
@@ -139,6 +156,7 @@ class ChartImg extends React.Component<any, any> {
           .attr("y", -60)
           .attr("transform", "rotate(+90)")
           .attr("dy", "2.00em")
+          .style("font-size", "12px")
           .style("text-anchor", "end")
           .attr("fill", "blue")
           .text("Humidity%");
