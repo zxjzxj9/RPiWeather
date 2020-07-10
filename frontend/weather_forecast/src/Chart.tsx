@@ -101,7 +101,7 @@ class ChartImg extends React.Component<any, any> {
           .attr("y", -60)
           .attr("dy", "2.00em")
           .style("text-anchor", "end")
-          .attr("fill", "#000000")
+          .attr("fill", "red")
           .text("Temperature/°C");
     
     curr.append("g")
@@ -114,7 +114,7 @@ class ChartImg extends React.Component<any, any> {
           .attr("transform", "rotate(-90)")
           .attr("dy", "2.00em")
           .style("text-anchor", "end")
-          .attr("fill", "#000000")
+          .attr("fill", "green")
           .text("Pressure/hBar");
 
     curr.append("g")
@@ -127,7 +127,7 @@ class ChartImg extends React.Component<any, any> {
           .attr("transform", "rotate(+90)")
           .attr("dy", "2.00em")
           .style("text-anchor", "end")
-          .attr("fill", "#000000")
+          .attr("fill", "blue")
           .text("Humidity%");
     //curr.append("g")
     //      .attr("transform", "translate(" + width + ", 0)") 
