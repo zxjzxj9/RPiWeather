@@ -1,7 +1,6 @@
 import React from 'react';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import * as d3 from 'd3';
-import { tsv } from 'd3';
 
 
 interface WeatherData {
@@ -25,7 +24,6 @@ class ChartImg extends React.Component<any, any> {
 
   fetchDraw(){
     var host = "http://192.168.199.249:8080";
-    var ret;
     const thisref = this;
     return axios.post<WeatherData>(host + "/date_weather", {
              'start': this.props.start.toISOString(),
@@ -35,8 +33,7 @@ class ChartImg extends React.Component<any, any> {
              // console.log(data);
              thisref.drawData(data);
              return data;
-           })
-             .catch(function (error) {
+           }).catch(function (error) {
              console.log(error);
            });
   }
