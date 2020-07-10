@@ -78,6 +78,19 @@ class ChartImg extends React.Component<any, any> {
       return "translate(" + (x + margin.left) + ", " + (y + margin.top) + ")";
     }
 
+    function drawLine(x: number[], y: number[], color='black') {
+      // zip xy
+      const d = x.map(function(e, i){return {x:e, y:y[i]};});
+      //const line: d3.Line<{x: number, y:number}> = d3.line()
+
+      //curr.append("path")
+      //    .data(d)
+      //    .attr("class", "line")
+      //    .style("stroke", color)
+      //    .attr("d", line);
+    }
+
+    // draw axis
     curr.append("g")
           .attr("transform", trans(0, height))
           .call(xAxis)
