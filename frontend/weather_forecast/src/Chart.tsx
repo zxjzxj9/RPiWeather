@@ -24,27 +24,37 @@ class ChartImg extends React.Component<any, any> {
     const w = parseInt(this.ref.current.style.width);
     // console.log(clone, h, w);
     const svgData = new XMLSerializer().serializeToString(clone);
-    var c = document.createElement('canvas');
+
+    var wd = (window.open("", "download") as Window);
+    var c = wd.document.createElement('canvas');
     c.setAttribute('width', w.toString());
     c.setAttribute('height', h.toString());
     var ctx = c.getContext('2d');
-    var img = document.createElement('img');
+    var img = wd.document.createElement('img');
     //console.log(img);
-    window.open('', 'download');
+
+    var doc = wd.document;
+    doc.body.appendChild(img);
+    //doc.body.appendChild(c);
+
     img.onload = () => {
       (ctx as CanvasRenderingContext2D).drawImage(img, 0, 0, w, h);
       // `download` attr is not well supported
       // Will result in a download popup for chrome and the
       // image opening in a new tab for others.
 
-      var a = document.createElement('a');
-      console.log(a);
+      var a = wd.document.createElement('a');
+      doc.body.appendChild(a);
+      //console.log(a);
       a.setAttribute('href', c.toDataURL('image/png'))
       a.setAttribute('target', 'download')
-      a.setAttribute('download', "data.pmg");
+      a.setAttribute('download', "data.png");
       a.click();
+
     };
-    img.setAttribute('src', 'data:image/svg+xml;base64,' + btoa(svgData));
+
+    img.setAttribute('src', 'data:image/svg+xml;charset=utf-8;base64,' + btoa(svgData));
+
   }
 
   fetchDraw(){
