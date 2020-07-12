@@ -22,8 +22,15 @@ class ChartImg extends React.Component<any, any> {
 
   download() {
     const clone = this.ref.current.cloneNode(true);
+    clone.removeAttribute("style");
     const h = parseInt(this.ref.current.style.height);
     const w = parseInt(this.ref.current.style.width);
+    clone.setAttribute("height", h);
+    clone.setAttribute("width", w);
+    clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    clone.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    clone.setAttribute("xml:space", "preserve");
+
     // console.log(clone, h, w);
     const svgData = new XMLSerializer().serializeToString(clone);
     //const svgData = encodeURIComponent(renderToStaticMarkup(clone));
@@ -53,10 +60,10 @@ class ChartImg extends React.Component<any, any> {
       a.setAttribute('target', 'download')
       a.setAttribute('download', "data.png");
       a.click();
-
+      wd.close();
     };
 
-    img.setAttribute('src', 'data:image/svg+xml;utf8, ' + clone.outerHTML.replace('"', "'"));
+    img.setAttribute('src', "data:image/svg+xml;base64," + window.btoa(unescape(encodeURIComponent(svgData))));
     //img.setAttribute('src', 'data:image/svg+xml;' + btoa(svgData));
 
   }
