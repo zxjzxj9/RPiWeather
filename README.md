@@ -31,3 +31,9 @@ Flask is used as the backend web engine. It has high flexiblity and can be easil
 ## 4. Front End
 
 We use react.js with SemanticUI as the frontend framework. The chart in the front end is handled by d3 library. Reqeust to RESTful server is handled by axios.
+
+Following is an example of the weather dataset. The date range can be selected, and the temperature, pressure, humidity is displayed in the image.
+
+![](./imgs/data.png)
+
+## 5. Machine Learning Pipeline
