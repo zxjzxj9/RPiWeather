@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import * as d3 from 'd3';
 // import ReactDOM from 'react-dom';
+// import { renderToStaticMarkup } from 'react-dom/server';
+
 
 interface WeatherData {
     humidity: number[];
@@ -24,6 +26,7 @@ class ChartImg extends React.Component<any, any> {
     const w = parseInt(this.ref.current.style.width);
     // console.log(clone, h, w);
     const svgData = new XMLSerializer().serializeToString(clone);
+    //const svgData = encodeURIComponent(renderToStaticMarkup(clone));
 
     var wd = (window.open("", "download") as Window);
     var c = wd.document.createElement('canvas');
@@ -53,7 +56,8 @@ class ChartImg extends React.Component<any, any> {
 
     };
 
-    img.setAttribute('src', 'data:image/svg+xml;charset=utf-8;base64,' + btoa(svgData));
+    img.setAttribute('src', 'data:image/svg+xml;utf8, ' + clone.outerHTML.replace('"', "'"));
+    //img.setAttribute('src', 'data:image/svg+xml;' + btoa(svgData));
 
   }
 
