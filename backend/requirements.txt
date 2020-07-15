@@ -5,3 +5,4 @@ psycopg2
 flask
 flask_restful
 flasgger
+requests
