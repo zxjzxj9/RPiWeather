@@ -12,5 +12,9 @@ import requests
 
 API_KEY_FILE="./apikey.json"
 
+# See the apidoc in https://openweathermap.org/current
+URL="https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${apikey}"
+
 def get_current_weather():
-    pass
+    with open(API_KEY_FILE, "r") as apif:
+        apikey = json.load(apif)["apikey"]
