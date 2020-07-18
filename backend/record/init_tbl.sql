@@ -18,7 +18,7 @@ create table weather_request (
     request_time timestamp,
     coord_lon real,
     coord_lat real,
-    weather_id real
+    weather_id real,
     weather_main text,
     weather_description text,
     weather_icon text,
