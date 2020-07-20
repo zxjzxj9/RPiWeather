@@ -1,10 +1,28 @@
 apiVersion: v1
-kind: ConfigMap
+kind: Deployment
 metadata:
-  name: postgres-config
-  labels:
-    app: postgres
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  containers:
+    - name: postgres
+      image: postgres:latest
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 5432
+        envFrom:
+          - configMapRef:
+            name: postgres-config
+            # volumeMounts:
+            #  - mountPath: /var/lib/postgresql/data
+            #    name: postgredb
+  type: NodePort
+  ports:
+    - port: 5432
+  selector:
+    app: postgres
 data:
-  POSTGRES_DB: weather
-  POSTGRES_USER: weather_admin
-  POSTGRES_PASSWORD: weather_123456
+  POSTGRES_DB: weather
+  POSTGRES_USER: weather_admin
+  POSTGRES_PASSWORD: weather_123456
