@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: postgres
+data:
+  POSTGRES_DB: weather
+  POSTGRES_USER: weather_admin
+  POSTGRES_PASSWORD: weather_123456
