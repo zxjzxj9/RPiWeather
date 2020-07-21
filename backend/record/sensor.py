@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 """ This script is used to sample the data from i2c
+    Running on RPi devices only
     Authored by Victor Zhang, 06/12/2020
 """
 
