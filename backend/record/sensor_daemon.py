@@ -1,5 +1,5 @@
 #! /usr/bin/evn python
-from .daemon_base import Daemon
+from daemon_base import Daemon
 
 from sqlalchemy import Table, MetaData, create_engine
 from sqlalchemy.dialects.postgresql import insert
