@@ -9,14 +9,35 @@ from signal import SIGTERM
 import logging
 import time
 import sys
-
  
 class Daemon(object):
-    def __init__(self, pidfile, stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
-        self.stdin = stdin
-        self.stdout = stdout
-        self.stderr = stderr
+    def __init__(self, pidfile, stdin=None, stdout=None, stderr=None):
+
+        if not stdin:
+            self.stdin = open("/dev/null", "r")
+        else:
+            self.stdin = open(stdin, "r")
+
+        if not stdout:
+            self.stdout = open("/dev/null", "a+")
+        else:
+            self.stdout = open(stdout, "a+")
+
+        if stdout == stderr:
+            self.stderr = self.stdout
+        else:
+            self.stderr = open(stderr, "a+")
+
         self.pidfile = pidfile
+        self.log = logging.getLogger("{} Logging".format(self.__class__.__name__))
+        self.log.setLevel(logging.INFO)
+
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
+
        
     def daemonize(self):
         try:
@@ -46,12 +67,10 @@ class Daemon(object):
         # redirect standard file descriptors
         sys.stdout.flush()
         sys.stderr.flush()
-        si = open(self.stdin, 'r')
-        so = open(self.stdout, 'a+')
-        se = open(self.stderr, 'a+')
-        os.dup2(si.fileno(), sys.stdin.fileno())
-        os.dup2(so.fileno(), sys.stdout.fileno())
-        os.dup2(se.fileno(), sys.stderr.fileno())
+        
+        sys.stdin = self.stdin
+        sys.stdout = self.stdout
+        sys.stderr = self.stderr
         
         # write pidfile
         atexit.register(self.delpid)
@@ -72,7 +91,7 @@ class Daemon(object):
             
         if pid:
             message = "pidfile %s already exist. Daemon already running?\n"
-            sys.stderr.write(message % self.pidfile)
+            self.log.error(message.format(self.pidfile))
             sys.exit(1)
             
         # Start the daemon
@@ -82,30 +101,30 @@ class Daemon(object):
     def stop(self):
         # Get the pid from the pidfile
         try:
-                pf = open(self.pidfile,'r')
-                pid = int(pf.read().strip())
-                pf.close()
+            pf = open(self.pidfile,'r')
+            pid = int(pf.read().strip())
+            pf.close()
         except IOError:
-                pid = None
+            pid = None
        
         if not pid:
-                message = "pidfile %s does not exist. Daemon not running?\n"
-                sys.stderr.write(message % self.pidfile)
-                return # not an error in a restart
- 
+            message = "pidfile {} does not exist. Daemon not running?\n"
+            self.log.warning(message.format(self.pidfile))
+            return
+
         # Try killing the daemon process       
         try:
-                while 1:
-                        os.kill(pid, SIGTERM)
-                        time.sleep(0.1)
+            while 1:
+                os.kill(pid, SIGTERM)
+                time.sleep(0.1)
         except OSError as err:
-                err = str(err)
-                if err.find("No such process") > 0:
-                        if os.path.exists(self.pidfile):
-                                os.remove(self.pidfile)
-                else:
-                        print(str(err))
-                        sys.exit(1)
+            err = str(err)
+            if err.find("No such process") > 0:
+                if os.path.exists(self.pidfile):
+                    os.remove(self.pidfile)
+            else:
+                self.log.error(str(err))
+                sys.exit(1)
  
     def restart(self):
         self.stop()
@@ -117,6 +136,10 @@ class Daemon(object):
 
 
 if __name__ == "__main__":
+
+    # class TestDaemon()
+
+
     fout = "record.log"
     pidf = "record.pid"
     dc = DataCollectorDaemon(pidf, "/dev/null", fout, fout, interval=600)
