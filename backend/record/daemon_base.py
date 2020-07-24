@@ -9,6 +9,7 @@ from signal import SIGTERM
 import logging
 import time
 import sys
+import abc
  
 class Daemon(object):
     def __init__(self, pidfile, stdin=None, stdout=None, stderr=None):
@@ -129,20 +130,25 @@ class Daemon(object):
     def restart(self):
         self.stop()
         self.start()
- 
-    def run(self):
-        raise NotImplementedError 
 
+    @abc.abstractmethod
+    def run(self, *args, **kwargs):
+        raise NotImplementedError 
 
 
 if __name__ == "__main__":
 
-    # class TestDaemon()
+    class TestDaemon(Daemon):
+        def __init__(self, pidfile, stdin=None, stdout=None, stderr=None):
+            super().__init__(pidfile, stdin, stdout, stderr)
+
+        def run(self):
+            self.log.info("Start running deamon")
 
 
     fout = "record.log"
     pidf = "record.pid"
-    dc = DataCollectorDaemon(pidf, "/dev/null", fout, fout, interval=600)
+    dc = TestDaemon(pidf, "/dev/null", fout, fout)
 
     if sys.argv[1] == "start":
         dc.start()
