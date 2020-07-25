@@ -12,33 +12,18 @@ import sys
 import abc
  
 class Daemon(object):
-    def __init__(self, pidfile, stdin=None, stdout=None, stderr=None):
-
-        if not stdin:
-            self.stdin = open("/dev/null", "r")
-        else:
-            self.stdin = open(stdin, "r")
-
-        if not stdout:
-            self.stdout = open("/dev/null", "a+")
-        else:
-            self.stdout = open(stdout, "a+")
-
-        if stdout == stderr:
-            self.stderr = self.stdout
-        else:
-            self.stderr = open(stderr, "a+")
+    def __init__(self, pidfile, logfile=None):
 
         self.pidfile = pidfile
         self.log = logging.getLogger("{} Logging".format(self.__class__.__name__))
-        self.log.setLevel(logging.INFO)
 
-        ch = logging.StreamHandler()
+        self.log.setLevel(logging.INFO)
+        ch = logging.FileHandler(filename = logfile if logfile 
+                                                    else "{}.log".format(self.__class__.__name__))
         ch.setLevel(logging.INFO)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch.setFormatter(formatter)
-        logger.addHandler(ch)
-
+        self.log.addHandler(ch)
        
     def daemonize(self):
         try:
@@ -47,7 +32,7 @@ class Daemon(object):
                 # exit first parent
                 sys.exit(0)
         except OSError as e:
-            sys.stderr.write("fork #1 failed: %d (%s)\n" % (e.errno, e.strerror))
+            self.log.error("fork #1 failed: %d (%s)\n" % (e.errno, e.strerror))
             sys.exit(1)
         
         # decouple from parent environment
@@ -62,23 +47,20 @@ class Daemon(object):
                 # exit from second parent
                 sys.exit(0)
         except OSError as e:
-            sys.stderr.write("fork #2 failed: %d (%s)\n" % (e.errno, e.strerror))
+            self.log.error("fork #2 failed: %d (%s)\n" % (e.errno, e.strerror))
             sys.exit(1)
         
         # redirect standard file descriptors
         sys.stdout.flush()
         sys.stderr.flush()
-        
-        sys.stdin = self.stdin
-        sys.stdout = self.stdout
-        sys.stderr = self.stderr
-        
+    
         # write pidfile
         atexit.register(self.delpid)
         pid = str(os.getpid())
         open(self.pidfile,'w+').write("%s\n" % pid)
        
     def delpid(self):
+        self.log.info("Stop running deamon...")
         os.remove(self.pidfile)
  
     def start(self):
@@ -96,6 +78,7 @@ class Daemon(object):
             sys.exit(1)
             
         # Start the daemon
+        self.log.info("Start running daemon...")
         self.daemonize()
         self.run()
  
@@ -139,16 +122,17 @@ class Daemon(object):
 if __name__ == "__main__":
 
     class TestDaemon(Daemon):
-        def __init__(self, pidfile, stdin=None, stdout=None, stderr=None):
-            super().__init__(pidfile, stdin, stdout, stderr)
+        def __init__(self, pidfile):
+            super().__init__(pidfile)
 
         def run(self):
             self.log.info("Start running deamon")
+            while True:
+                time.sleep(1)
+                self.log.info("Waiting for 1s ...")
 
-
-    fout = "record.log"
     pidf = "record.pid"
-    dc = TestDaemon(pidf, "/dev/null", fout, fout)
+    dc = TestDaemon(pidf)
 
     if sys.argv[1] == "start":
         dc.start()
