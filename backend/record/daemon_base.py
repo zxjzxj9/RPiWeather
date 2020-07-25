@@ -49,10 +49,6 @@ class Daemon(object):
         except OSError as e:
             self.log.error("fork #2 failed: %d (%s)\n" % (e.errno, e.strerror))
             sys.exit(1)
-        
-        # redirect standard file descriptors
-        # sys.stdout.flush()
-        # sys.stderr.flush()
     
         # write pidfile
         atexit.register(self.delpid)
