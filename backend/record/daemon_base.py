@@ -51,8 +51,8 @@ class Daemon(object):
             sys.exit(1)
         
         # redirect standard file descriptors
-        sys.stdout.flush()
-        sys.stderr.flush()
+        # sys.stdout.flush()
+        # sys.stderr.flush()
     
         # write pidfile
         atexit.register(self.delpid)
@@ -60,7 +60,6 @@ class Daemon(object):
         open(self.pidfile,'w+').write("%s\n" % pid)
        
     def delpid(self):
-        self.log.info("Stop running deamon...")
         os.remove(self.pidfile)
  
     def start(self):
@@ -98,6 +97,7 @@ class Daemon(object):
 
         # Try killing the daemon process       
         try:
+            self.log.info("Stop running deamon...")
             while 1:
                 os.kill(pid, SIGTERM)
                 time.sleep(0.1)
@@ -126,7 +126,6 @@ if __name__ == "__main__":
             super().__init__(pidfile)
 
         def run(self):
-            self.log.info("Start running deamon")
             while True:
                 time.sleep(1)
                 self.log.info("Waiting for 1s ...")
