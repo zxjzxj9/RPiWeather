@@ -7,6 +7,9 @@ import sensor
 import datetime
 import logging
 import time
+import sys
+
+SQL_CONN_STR = "postgresql:///weather"
 
 def insert_data(engine):
     with engine.connect() as conn:
@@ -23,16 +26,14 @@ def insert_data(engine):
 
 class DataCollectorDaemon(Daemon):
     
-    def __init__(self, pidfile, stdin='/dev/null', stdout='/dev/null', stderr='/dev/null', interval=10):
-        super().__init__(pidfile, stdin, stdout, stderr)
+    def __init__(self, pidfile, interval):
+        super().__init__(pidfile)
         self.interval = interval
 
     def run(self):
        
-        logging.basicConfig(format='%(asctime)s - %(process)d - %(levelname)s - %(message)s')
-        logging.info("Collecting process started...")
-
-        engine = create_engine("postgresql:///weather")
+        self.log.info("Collecting process started...")
+        engine = create_engine(SQL_CONN_STR)
 
         while True:
             ret = insert_data(engine)
@@ -40,4 +41,14 @@ class DataCollectorDaemon(Daemon):
             time.sleep(self.interval)
 
 if __name__ == "__main__":
-    pass
+    pidf = "record.pid"
+    dc = DataCollectorDaemon(pidf, 600)
+
+    if sys.argv[1] == "start":
+        dc.start()
+    elif sys.argv[1] == "stop":
+        dc.stop()
+    elif sys.argv[1] == "restart":
+        dc.restart()
+    else:
+        print("Unknown command: ", sys.argv[1])
