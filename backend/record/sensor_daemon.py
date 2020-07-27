@@ -5,7 +5,6 @@ from sqlalchemy import Table, MetaData, create_engine
 from sqlalchemy.dialects.postgresql import insert
 import sensor
 import datetime
-import logging
 import time
 import sys
 
@@ -37,7 +36,7 @@ class DataCollectorDaemon(Daemon):
 
         while True:
             ret = insert_data(engine)
-            logging.info(str(ret))
+            self.log.info(str(ret))
             time.sleep(self.interval)
 
 if __name__ == "__main__":
