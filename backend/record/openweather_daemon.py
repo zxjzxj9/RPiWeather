@@ -8,7 +8,8 @@ import datetime
 import time
 import sys
 import requests
-
+import string
+import json
 
 API_KEY_FILE="./apikey.json"
 CITY="Shanghai"
@@ -18,11 +19,23 @@ URL="https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${apike
 
 SQL_CONN_STR = "postgresql:///weather"
 
+
 class OpenWeatherDaemon(Daemon):
 
     def __init__(self, pidfile, interval):
         super().__init__(pidfile)
         self.interval = interval
+        with open(API_KEY_FILE, "r") as apif:
+            self.apikey = json.load(apif)["apikey"]
+
+        self.url = string.Template(URL).substitute({
+                "cityname": CITY,
+                "apikey": self.apikey
+            })
+
+    def get_current_weather(self):
+        ret = requests.get(self.url)
+        data = ret.json()
     
     def run(self):
         self.log.info("Weather collecting process started...")
