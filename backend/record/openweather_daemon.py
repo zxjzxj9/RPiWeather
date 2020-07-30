@@ -47,4 +47,15 @@ class OpenWeatherDaemon(Daemon):
             time.sleep(self.interval)
 
 if __name__ == "__main__":
-    pass
+
+    pidf = "weather.pid"
+    owd = OpenWeatherDaemon(pidf, 3600)
+
+    if sys.argv[1] == "start":
+        owd.start()
+    elif sys.argv[1] == "stop":
+        owd.stop()
+    elif sys.argv[1] == "restart":
+        owd.restart()
+    else:
+        print("Unknown command: ", sys.argv[1])

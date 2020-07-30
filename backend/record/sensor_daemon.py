@@ -40,7 +40,7 @@ class DataCollectorDaemon(Daemon):
             time.sleep(self.interval)
 
 if __name__ == "__main__":
-    pidf = "record.pid"
+    pidf = "sensor.pid"
     dc = DataCollectorDaemon(pidf, 600)
 
     if sys.argv[1] == "start":
