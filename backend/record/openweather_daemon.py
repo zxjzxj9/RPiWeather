@@ -32,14 +32,19 @@ class OpenWeatherDaemon(Daemon):
                 "cityname": CITY,
                 "apikey": self.apikey
             })
+        self.engine = create_engine(SQL_CONN_STR)
 
     def get_current_weather(self):
         ret = requests.get(self.url)
         data = ret.json()
+
+        with self.engine.connect() as conn:
+            meta = MetaData()
+            wdp = Table('weather_request', meta, autoload=True, autoload_with=conn)
+            
     
     def run(self):
         self.log.info("Weather collecting process started...")
-        engine = create_engine(SQL_CONN_STR)
 
         while True:
             # ret = insert_data(engine)
