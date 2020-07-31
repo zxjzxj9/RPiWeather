@@ -35,7 +35,6 @@ class OpenWeatherDaemon(Daemon):
         self.engine = create_engine(SQL_CONN_STR)
 
     def get_current_weather(self):
-<<<<<<< HEAD
         try:
             ret = requests.get(self.url)
             data = ret.json()
@@ -48,19 +47,35 @@ class OpenWeatherDaemon(Daemon):
                     requests_time = datetime.datetime.now(),
                     coord_lon = data["coord"]["lon"],
                     coord_lat = data["coord"]["lat"],
+                    weather_id = data["weather"]["id"],
+                    weather_main = data["weather"]["main"],
+                    weather_description = data["weather"]["description"],
+                    weather_icon = data["weather"]["icon"],
+                    base = data["base"],
+                    main_temp = data["main"]["temp"],
+                    main_feels_like = data["main"]["feels_like"],
+                    main_temp_min = data["main"]["temp_min"],
+                    main_temp_max = data["main"]["temp_max"],
+                    main_pressure = data["main"]["pressure"],
+                    main_humidity = data["main"]["humidity"],
+                    visibility = data["visibility"],
+                    wind_speed = data["wind"]["speed"],
+                    wind_deg = data["wind"]["deg"],
+                    clouds_all = data["clouds"]["all"],
+                    dt = data["dt"],
+                    sys_type = data["sys"]["type"],
+                    sys_id = data["sys"]["id"],
+                    sys_country = data["sys"]["country"],
+                    sys_sunrise = data["sys"]["sunrise"],
+                    sys_sunset = data["sys"]["sunset"],
+                    timezone = data["timezone"],
+                    id = data["id"],
+                    name = data["name"],
+                    cod = data["cod"]
                 )
 
         except Exception as e:
             self.log.error(e)
-=======
-        ret = requests.get(self.url)
-        data = ret.json()
-
-        with self.engine.connect() as conn:
-            meta = MetaData()
-            wdp = Table('weather_request', meta, autoload=True, autoload_with=conn)
-            
->>>>>>> a207f65d18f0998b18675b22463fda7754bd67cc
     
     def run(self):
         self.log.info("Weather collecting process started...")
